@@ -1,9 +1,4 @@
-import { Controller, Get,
-    Post,
-    Put,
-    Delete,
-    Body,
-    Param } from '@nestjs/common';
+import { Controller, Get, Post, Put, Delete, Body, Param, Query } from '@nestjs/common';
 import { BooksService } from './books.service';
 import { BOOKS } from '../mocks/books.mock';
 import { IBooks } from './books.IBook';
@@ -18,8 +13,9 @@ export class BooksController {
     }
 
     @Get(':id')
-    index(@Param('id')id):Promise<IBooks>{
-        return this.booksService.getBook(id);
+    async index(@Param('id')bookId){
+        const book = await this.booksService.getBook(bookId);
+        return book;
     }
 
     @Post()
@@ -27,9 +23,10 @@ export class BooksController {
         return this.booksService.addBook(books);
     }
 
-    @Delete(':id')
-    delete(@Param('id')books: BooksService):Promise<IBooks>{
-        return this.booksService.delete(books);
+    @Delete()
+    async delete(@Query() query){
+        const book = await this.booksService.delete(query.bookId)
+        return BOOKS;
     }
 
 }

@@ -13,14 +13,15 @@ export class BooksService {
         });
     }
 
-    delete(Id): Promise<any> {
-        let id = Number(Id);
+    delete(bookId): Promise<any> {
+        let id = Number(bookId);
         return  new Promise(resolve => {
-            const book = this.books.find(books => books.id === id);
-            if(!book){
+            let book = this.books.findIndex(books => books.id === id);
+            if(book === -1){
                 throw new HttpException('O livro não existe.', 404);
             }
-            resolve(book);
+            this.books.splice(1, book);
+            resolve(this.books);
         });
     }
 
